@@ -5,6 +5,7 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 
 import { revalidatePath } from "next/cache";
+import mongoose from "mongoose";
 
 
 
@@ -43,42 +44,47 @@ export async function createThread({
 }
 
 //fetches posts and implements pagination
-export async function fetchPosts(pageNumber = 1, pageSize = 20){
-    connectTODB();
+export async function fetchPosts(pageNumber = 1, pageSize = 20) {
+    try {
+        // Connect to DB only if not already connected
+        if (mongoose.connection.readyState !== 1) {
+            await connectTODB();
+        }
 
-    // Calculate the number of posts to skip
-    const skipAmount = (pageNumber - 1) * pageSize;
+        // Calculate the number of posts to skip
+        const skipAmount = (pageNumber - 1) * pageSize;
 
-    // Fetch the posts that have no parents (top-level posts)
-    const postsQuery  =  Thread.find({ parentId: {$in: [null, undefined]}})
-    .sort({ createdAt: 'desc'})
-    .skip(skipAmount)
-    .limit(pageSize)
-    .populate({ path: 'author', model: User})
-    // .populate({
-    //     path: "community",
-    //     model: Community,
-    //   })
-    .populate({
-        path: 'children', // Populate the children field
-        populate: {
-          path: 'author', // Populate the author field within children
-          model: User,
-          select: '_id name parentId image', // Select only _id and username fields of the author
-        },
-      });
-    
-    // Get the total count of posts(top-level posts)
-    const totalPostsCount = await Thread.countDocuments({ parentId: {$in: [null, undefined]}})
+        // Use Promise.all to execute both queries in parallel
+        const [posts, totalPostsCount] = await Promise.all([
+            // Fetch the posts
+            Thread.find({ parentId: { $in: [null, undefined] } })
+                .sort({ createdAt: 'desc' })
+                .skip(skipAmount)
+                .limit(pageSize)
+                .populate({ path: 'author', model: User, select: '_id name image' })
+                // .populate({ path: "community", model: Community })
+                .populate({
+                    path: 'children',
+                    populate: { path: 'author', model: User, select: '_id name parentId image' }
+                })
+                .exec(),
 
-    const posts = await postsQuery.exec()
-    
-    // Checks for more posts in oder to render another page
-    const isNext = totalPostsCount > skipAmount + posts.length
+            // Get the total count of posts
+            Thread.countDocuments({ parentId: { $in: [null, undefined] } })
+        ]);
 
-    return { posts, isNext }
+        // Checks for more posts in order to render another page
+        const isNext = totalPostsCount > skipAmount + posts.length;
 
+        return { posts, isNext };
+    } catch (error) {
+        console.error("Error fetching posts:", error);
+        // Handle the error as per your application's error handling policy
+        // This could be returning an error message, throwing a custom error, etc.
+        throw error; // Rethrow the error if you want the caller to handle it
+    }
 }
+
 
 //Retrieves a post with its details
 export async function fetchThreadById(id: string) {

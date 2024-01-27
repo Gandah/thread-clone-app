@@ -1,3 +1,4 @@
+"use server"
 import { authMiddleware } from "@clerk/nextjs";
  
 // This example protects all routes including api/trpc routes
