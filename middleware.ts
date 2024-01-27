@@ -8,7 +8,7 @@ export const maxDuration = 28;
 export const dynamic = 'force-dynamic';
 
 export default authMiddleware({
-    publicRoutes: ['/', '/api/webhook/clerk'],
+    publicRoutes: ['/sign-in', '/api/webhook/clerk'],
     ignoredRoutes: ['/api/webhook/clerk']
 });
  
