@@ -8,7 +8,7 @@ const nextConfig = {
     '/node_modules/function-bind/**',
   ],
   experimental: {
-    // serverActions: true,
+    serverActions: true,
     serverComponentsExternalPackages: ["mongoose"],
   },
   typescript: {

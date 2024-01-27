@@ -45,12 +45,11 @@ export async function createThread({
 
 //fetches posts and implements pagination
 export async function fetchPosts(pageNumber = 1, pageSize = 20) {
-    try {
-        // Connect to DB only if not already connected
-        if (mongoose.connection.readyState !== 1) {
-            await connectTODB();
-        }
+     
+     connectTODB();
 
+    try {
+       
         // Calculate the number of posts to skip
         const skipAmount = (pageNumber - 1) * pageSize;
 
