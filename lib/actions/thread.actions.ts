@@ -5,7 +5,7 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 
 import { revalidatePath } from "next/cache";
-import mongoose from "mongoose";
+
 
 
 
