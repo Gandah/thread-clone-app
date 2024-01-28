@@ -23,6 +23,8 @@ const UserCard = ({
 
     const router = useRouter();
 
+    const pathSelector = foundUserType === 'User' ? `/profile/${id}`: `/communities/${id}`
+
     return (
         <article className="user-card">
             <div className="user-card_avatar">
@@ -44,7 +46,7 @@ const UserCard = ({
                 </div>
             </div>
 
-            <Button className="user-card_btn" onClick={() => router.push(`/profile/${id}`)}>
+            <Button className="user-card_btn" onClick={() => router.push(pathSelector)}>
                 View
             </Button>
         </article>

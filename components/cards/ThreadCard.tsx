@@ -122,6 +122,7 @@ function ThreadCard({
           parentId={parentId}
           isComment={isComment}
         />
+        1
       </div>
 
       {!isComment && comments.length > 0 && (
