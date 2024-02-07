@@ -1,4 +1,3 @@
-"use client"
 import { ClerkProvider } from "@clerk/nextjs"
 import { Lato } from "next/font/google"
 
