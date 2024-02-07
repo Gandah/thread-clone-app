@@ -14,7 +14,7 @@ import * as z from "zod"
 import Image from "next/image";
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 
 import { CommentValidation } from "@/lib/validations/thread";
@@ -36,7 +36,7 @@ const Comment = ({ threadId,
 
 
         const pathname = usePathname()
-        const router = useRouter()
+        
 
         const form = useForm({
             resolver: zodResolver(CommentValidation),

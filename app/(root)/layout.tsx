@@ -6,6 +6,7 @@ import LeftSidebar from "@/components/shared/LeftSidebar";
 import Bottombar from "@/components/shared/Bottombar";
 
 import { Inter } from "next/font/google";
+import { dark } from "@clerk/themes";
 import "../globals.css";
 
 
@@ -24,7 +25,13 @@ export default function RootLayout({
 }>) {
   return (
     
-   <ClerkProvider>
+   <ClerkProvider
+    appearance={{
+      baseTheme: dark,
+      variables: { colorText: 'white'}
+
+    }}
+   >
      <html lang="en">
       <body className={inter.className}>
         <Topbar/>

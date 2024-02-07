@@ -5,13 +5,14 @@ import ThreadCard from "@/components/cards/ThreadCard";
 import Pagination from "@/components/shared/Pagination";
 
 import { fetchPosts } from "@/lib/actions/thread.actions";
-import { fetchUser } from "@/lib/actions/user.actions";
+import { fetchProfileUser, fetchUser } from "@/lib/actions/user.actions";
 
 async function Home({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
+
   const user = await currentUser();
   if (!user) return null;
 
@@ -32,7 +33,10 @@ async function Home({
           <p className='no-result'>No threads found</p>
         ) : (
           <>
-            {result.posts.map((post) => (
+            {result.posts.map( async (post) => {
+              const userProfile = await fetchProfileUser(post?.author?._id) //fetch and pass each user's id 
+            
+            return (
               <ThreadCard
                 key={post._id}
                 id={post._id}
@@ -43,8 +47,9 @@ async function Home({
                 community={post.community}
                 createdAt={post.createdAt}
                 comments={post.children}
+                userProfileId={userProfile.id}
               />
-            ))}
+            )})}
           </>
         )}
       </section>

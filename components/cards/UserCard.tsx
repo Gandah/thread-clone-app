@@ -28,13 +28,16 @@ const UserCard = ({
     return (
         <article className="user-card">
             <div className="user-card_avatar">
-                <Image 
-                src={imgUrl} 
-                alt="avatar" 
-                width={48}
-                height={48}
-                className="rounded-full"
-                />
+                <div className="rounded-[50%] aspect-square overflow-hidden">
+                    <Image 
+                    src={imgUrl} 
+                    alt="avatar" 
+                    width={48}
+                    height={48}
+                    className="block max-w-full min-h-[48px] object-cover"
+                    />
+                </div>
+                
 
                 <div className="flex-1 text-ellipsis">
                     <h4 className="text-base-semibold text-light-1">

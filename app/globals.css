@@ -2,6 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background-color: #0c0c0c;
+
+}
+
+
+@media only screen and (min-width:1024px){
+  body { 
+    background-image: url("../public/assets/bg6.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+}
+
+.cl-rootBox{
+  background: transparent;
+} 
+
+
+/* Create Organization component text */
+/* .cl-scrollBox{
+  background: transparent;
+} */
+
+
+/* .cl-headerTitle, 
+.cl-internal-3vf5mz,
+.cl-formFieldLabel,
+.cl-fileDropAreaBox,
+.cl-fileDropAreaHint,
+.cl-fileDropAreaFooterHint {
+  color: whitesmoke !important;
+} */
+
+
+/* Create Organization component icons */
+/* .cl-internal-13n8bwo{
+  background-color: whitesmoke;
+}
+
+.cl-internal-13n8bwo:hover{
+  background-color: whitesmoke;
+  opacity: 0.6;
+}
+
+.cl-fileDropAreaIconBox{
+  background-color: whitesmoke;
+} */
+
+/* Sign-in Card */
+.cl-card{
+  /* background: rgba(237, 235, 235, 0.2); */
+  background: rgba(59, 59, 59, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color:whitesmoke;
+
+}
+
+/* Organization Settings Panel */
+/* .cl-organizationPreview,
+.cl-navbarButtons button,
+.cl-headerSubtitle,
+.cl-tabListContainer button,
+.cl-internal-wt8am5 th,
+.cl-internal-1tvclx8, 
+.cl-userPreview{
+  color: whitesmoke;
+} */
+
+.cl-rootBox.cl-organizationProfile-root{
+  color: whitesmoke !important;
+}
+
+
 @layer components {
   /* main */
   .main-container {
@@ -89,6 +167,7 @@
   .rightsidebar {
     @apply sticky right-0 top-0 z-20 flex h-screen w-fit flex-col justify-between gap-12 overflow-auto border-l border-l-dark-4 bg-dark-2 px-10 pb-6 pt-28 max-xl:hidden;
   }
+
 }
 
 @layer utilities {

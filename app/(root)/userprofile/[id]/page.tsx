@@ -1,5 +1,5 @@
 import { fetchUser } from "@/lib/actions/user.actions";
-import { clerkClient, currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs";
 
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import ThreadsTab from "@/components/shared/ThreadsTab";
@@ -11,7 +11,6 @@ import { profileTabs } from "@/constants";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import TaggedTab from "@/components/shared/TaggedTab";
-import UserProfileHeader from "@/components/shared/UserProfileHeader";
 
 
 
@@ -19,9 +18,7 @@ interface Params {
     params: {id: string}
 };
 
-const Profile = async ( { params }: Params) => {
-
-    
+const UserProfile = async ( { params }: Params) => {
 
     const user  = await currentUser();
     if(!user) return null;
@@ -30,30 +27,17 @@ const Profile = async ( { params }: Params) => {
     
     if(!userInfo?.onboarded) redirect('/onboarding');
 
-    const userObj = await clerkClient.users.getUser(user.id);
-
   return (
     <section>
-        {/* Profile Header */}
-        {userInfo.id === userObj.id ? (
-             <ProfileHeader
-             accountId={userInfo.id}
-             authUserId={userInfo.id}
-             name={userInfo.name}
-             imgUrl={userInfo.image}
-             bio={userInfo.bio}
-             username={userInfo.username}
-             />
-        ) : (
-            <UserProfileHeader
-            name={userInfo.name}
-            imgUrl={userInfo.image}
-            bio={userInfo.bio}
-            username={userInfo.username}
-            />
-        )}
+        <ProfileHeader
+        accountId={userInfo.id}
+        authUserId={userInfo.id}
+        name={userInfo.name}
+        imgUrl={userInfo.image}
+        bio={userInfo.bio}
+        username={userInfo.username}
+        />
 
-         {/* Profile Tabs  */}
         <div className="mt-9">
             <Tabs defaultValue="threads" className="w-full">
                 <TabsList className="tab">
@@ -80,7 +64,7 @@ const Profile = async ( { params }: Params) => {
                     ))}
                 </TabsList>
 
-                {/* Profile Tab's Content  */}
+                {/* Profile Tabs  */}
                 {profileTabs.map((tab) => (
                     <TabsContent key={`content-${tab.label}`}
                     value={tab.value}
@@ -104,11 +88,11 @@ const Profile = async ( { params }: Params) => {
                             <TaggedTab />
                             ) : null}
                     </TabsContent>
-                ))}            
+                ))}
             </Tabs>
         </div>
     </section>
   )
 }
 
-export default Profile
+export default UserProfile

@@ -1,7 +1,7 @@
 import ThreadCard from "@/components/cards/ThreadCard"
 import Comment from "@/components/forms/Comment";
 import { fetchThreadById } from "@/lib/actions/thread.actions";
-import { fetchUser } from "@/lib/actions/user.actions";
+import { fetchUser,fetchProfileUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
@@ -17,24 +17,28 @@ const page = async ({ params } : Params) => {
     if(!user) return null;
     
     // redirect user to onboarding page if user is not onboarded
-    const userInfo = await fetchUser(user.id)
+    const userInfo = await fetchUser(user?.id)
     if(!userInfo?.onboarded) redirect("/onboarding");
     
-    const thread = await fetchThreadById(params.id);
+    const thread = await fetchThreadById(params?.id);
+
+    const threadUserProfile = await fetchProfileUser(thread?.author?._id)
+
 
   return (
     <section className="relative">
        <div>
         <ThreadCard
-                key={thread._id}
-                id={thread._id}
-                currentUserId={user?.id || ""}
-                parentId={thread.parentId}
-                content={thread.text}
-                author={thread.author}
-                community={thread.commmunity}
-                createdAt={thread.createdAt}
-                comments={thread.children}
+            key={thread._id}
+            id={thread._id}
+            currentUserId={user?.id || ""}
+            parentId={thread.parentId}
+            content={thread.text}
+            author={thread.author}
+            community={thread.commmunity}
+            createdAt={thread.createdAt}
+            comments={thread.children}
+            userProfileId={threadUserProfile?.id}
                 />
        </div>
 
@@ -47,19 +51,25 @@ const page = async ({ params } : Params) => {
         </div>
 
         <div className="flex flex-col mt-10">
-            {thread.children.map((childItem: any) => (
-            <ThreadCard
-                key={childItem._id}
-                id={childItem._id}
-                currentUserId={user?.id || ""}
-                parentId={childItem.parentId}
-                content={childItem.text}
-                author={childItem.author}
-                community={childItem.commmunity}
-                createdAt={childItem.createdAt}
-                comments={childItem.children}
-                isComment
-                />))
+            {thread.children.map( async (childItem: any) => {
+
+            const userProfile = await fetchProfileUser(childItem?.author?._id)
+                return (
+                <ThreadCard
+                    key={childItem._id}
+                    id={childItem._id}
+                    currentUserId={user?.id || ""}
+                    parentId={childItem.parentId}
+                    content={childItem.text}
+                    author={childItem.author}
+                    community={childItem.commmunity}
+                    createdAt={childItem.createdAt}
+                    comments={childItem.children}
+                    isComment
+                    userProfileId={userProfile.id}
+                    />)
+            }
+                )
 
             }
         </div>

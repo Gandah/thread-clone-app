@@ -1,25 +1,19 @@
 import Image from "next/image";
-import Link from "next/link";
 
-interface Props {
-    accountId: string;
-    authUserId: string;
+
+interface UserProfileHeaderProps {
     name: string;
     imgUrl: string;
     bio: string;
     username: string;
-    type?: 'User' | 'Community';
 }
 
-const ProfileHeader = ({
-    accountId,
-    authUserId,
+const UserProfileHeader = ({
     name,
     imgUrl,
     bio,
     username,
-    type,
-}: Props) => {
+}: UserProfileHeaderProps) => {
 
     return (
         <div className="flex flex-col w-full justify-start">
@@ -42,22 +36,7 @@ const ProfileHeader = ({
                              text-gray-1">@{username}</p>
                     </div>
                 </div>
-
-                {/* if logged into Commnunities, hide edit link*/}
-                {accountId === authUserId && type !== "Community" && (
-                    <Link href='/profile/edit'>
-                        <div className='flex cursor-pointer gap-3 rounded-lg bg-dark-3 px-4 py-2'>
-                            <Image
-                                src='/assets/edit.svg'
-                                alt='logout'
-                                width={16}
-                                height={16}
-                            />
-
-                            <p className='text-light-2 max-sm:hidden'>Edit</p>
-                        </div>
-                    </Link>
-                )}
+ 
             </div>
            
             <p className="mt-6 max-w-lg 
@@ -68,4 +47,4 @@ const ProfileHeader = ({
     )
 }
 
-export default ProfileHeader
+export default UserProfileHeader;

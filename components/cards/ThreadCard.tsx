@@ -7,15 +7,18 @@ import DeleteThread from "../forms/DeleteThread";
 import { Key } from "react";
 
 
+
 interface Props {
   id: Key | null | undefined;
   currentUserId: string;
+  userProfileId?: string;
   parentId: string | null;
   content: string;
   author: {
+    _id: string;
     name: string;
     image: string;
-    _id: string;
+    id: string;
   };
   community: {
     id: string;
@@ -31,7 +34,7 @@ interface Props {
   isComment?: boolean;
 }
 
-function ThreadCard({
+async function ThreadCard({
   id,
   currentUserId,
   parentId,
@@ -40,6 +43,7 @@ function ThreadCard({
   community,
   createdAt,
   comments,
+  userProfileId,
   isComment,
 }: Props) {
 
@@ -49,12 +53,12 @@ function ThreadCard({
         className={`flex w-full flex-col rounded-xl ${isComment ? "px-0 xs:px-7" : "bg-dark-2 p-7"
           }`}
       >
-
-        
           <div className='flex items-start justify-between'>
             <div className='flex w-full flex-1 flex-row gap-4'>
               <div className='flex flex-col items-center'>
-                <Link href={`/profile/${JSON.stringify(author._id)}`} className='relative h-11 w-11'>
+                
+                {/* Profile image */}
+                <Link href={`/profile/${userProfileId === currentUserId ? currentUserId : userProfileId}`} className='relative h-11 w-11 overflow-hidden'>
                   <Image
                     src={author.image}
                     alt='user_community_image'
@@ -67,15 +71,16 @@ function ThreadCard({
               </div>
 
               <div className='flex w-full flex-col'>
-                <Link href={`/profile/${JSON.stringify(author._id)}`} className='w-fit'>
+                <Link href={`/profile/${userProfileId === currentUserId ? currentUserId : userProfileId}`} className='w-fit'>
                   <h4 className='cursor-pointer text-base-semibold text-light-1'>
                     {author.name}
                   </h4>
                 </Link>
 
+                {/* Thread content */}
                 <p className='mt-2 text-small-regular text-light-2'>{content}</p>
 
-                {/* Acttion Buttons */}
+                {/* Action Buttons */}
                 <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
                   <div className='flex gap-3.5'>
                     <Image
@@ -88,26 +93,33 @@ function ThreadCard({
                     <Link href={`/thread/${id}`}>
                       <Image
                         src='/assets/reply.svg'
+                        alt='reply'
+                        width={24}
+                        height={24}
+                        className='cursor-pointer object-contain'
+                      />
+                    </Link>
+
+                    <Link href="/">
+                      <Image
+                        src='/assets/repost.svg'
                         alt='heart'
                         width={24}
                         height={24}
                         className='cursor-pointer object-contain'
                       />
                     </Link>
-                    <Image
-                      src='/assets/repost.svg'
-                      alt='heart'
-                      width={24}
-                      height={24}
-                      className='cursor-pointer object-contain'
-                    />
-                    <Image
-                      src='/assets/share.svg'
-                      alt='heart'
-                      width={24}
-                      height={24}
-                      className='cursor-pointer object-contain'
-                    />
+                   
+
+                  <Link href={`/thread/${id}`}>
+                      <Image
+                        src='/assets/share.svg'
+                        alt='share'
+                        width={24}
+                        height={24}
+                        className='cursor-pointer object-contain'
+                      />
+                    </Link>
                   </div>
 
                   {isComment && comments.length > 0 && (
@@ -121,10 +133,11 @@ function ThreadCard({
               </div>
             </div>
 
+
             <DeleteThread
               threadId={JSON.stringify(id)}
               currentUserId={currentUserId}
-              authorId={JSON.stringify(author._id)}
+              authorId={author.id}
               parentId={parentId}
               isComment={isComment}
             />
@@ -161,20 +174,20 @@ function ThreadCard({
                 {formatDateString(createdAt)}
                 {community && ` - ${community.name} Community`}
               </p>
-
-              <Image
-                src={community.image}
-                alt={community.name}
-                width={14}
-                height={14}
-                className='ml-1 rounded-full object-cover'
-              />
+              
+              <div className='ml-1 rounded-[50%] aspect-square overflow-hidden'> 
+                <Image
+                  src={community.image}
+                  alt={community.name}
+                  width={14}
+                  height={14}
+                  className='max-w-full min-h-[14px] object-cover'
+                />
+              </div>
+              
             </Link>
-          )}
-
-        
+          )}  
       </article>
-
   );
 }
 

@@ -7,17 +7,7 @@ import CommunityCard from "@/components/cards/CommunityCard";
 
 import { fetchUser } from "@/lib/actions/user.actions";
 import { fetchCommunities } from "@/lib/actions/community.actions";
-// import { Key } from "react";
 
-
-// interface CommunityProps { 
-//   id: Key | undefined | null; 
-//   name: string; 
-//   username: string; 
-//   image: string; 
-//   bio: string; 
-//   members: any; 
-// }
 
 async function Page({
   searchParams,
